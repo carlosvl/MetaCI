@@ -60,10 +60,6 @@ class Plan(models.Model):
     def __unicode__(self):
         return self.name
 
-    def get_repos(self):
-        for repo in self.repos.all():
-            yield repo
-
     def check_push(self, push):
         run_build = False
         commit = None
