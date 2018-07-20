@@ -81,7 +81,7 @@ class Plan(models.Model):
             if commit == '0000000000000000000000000000000000000000':
                 run_build = False
                 commit = None
-            return run_build, commit, commit_message
+                return run_build, commit, commit_message
 
             for commit_info in push.get('commits',[]):
                 if commit_info['id'] == commit:
@@ -134,7 +134,10 @@ class PlanRepository(models.Model):
     def __unicode__(self):
         return u'[{}] {}'.format(self.repo, self.plan)
 
+    def get_absolute_url(self):
         return reverse('plan_detail_repo', kwargs={'plan_id': self.id, 'repo_owner': self.repo.owner, 'repo_name': self.repo.name})
+
+
 
 class PlanSchedule(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
