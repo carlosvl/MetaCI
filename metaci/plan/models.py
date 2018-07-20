@@ -134,6 +134,7 @@ class PlanRepository(models.Model):
     def __unicode__(self):
         return u'[{}] {}'.format(self.repo, self.plan)
 
+        return reverse('plan_detail_repo', kwargs={'plan_id': self.id, 'repo_owner': self.repo.owner, 'repo_name': self.repo.name})
 
 class PlanSchedule(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
