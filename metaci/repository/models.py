@@ -48,3 +48,4 @@ class Branch(SoftDeletableModel):
     def github_api(self):
         branch = self.repo.github_api.branch(self.name)
         return branch
+        
