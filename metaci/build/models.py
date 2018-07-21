@@ -84,6 +84,7 @@ class GnarlyEncoder(DjangoJSONEncoder):
 
 
 class Build(models.Model):
+    planrepo = models.ForeignKey('plan.PlanRepository', related_name='builds', null=True, blank=True, on_delete=models.SET_NULL)
     repo = models.ForeignKey('repository.Repository', related_name='builds', on_delete=models.CASCADE)
     branch = models.ForeignKey('repository.Branch', related_name='builds',
                                null=True, blank=True, on_delete=models.CASCADE)
