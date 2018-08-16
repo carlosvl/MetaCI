@@ -1,5 +1,3 @@
-from github3 import login
-
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field
@@ -7,7 +5,6 @@ from crispy_forms.layout import Fieldset
 from crispy_forms.layout import Layout
 from crispy_forms.layout import Submit
 from django import forms
-from django.conf import settings
 from metaci.repository.models import Branch
 from metaci.build.models import Build
 
