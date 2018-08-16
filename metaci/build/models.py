@@ -30,6 +30,7 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 import requests
 
+from metaci.build.tasks import set_github_status
 from metaci.build.utils import format_log
 from metaci.build.utils import set_build_info
 from metaci.cumulusci.config import MetaCIGlobalConfig
@@ -408,6 +409,10 @@ class BuildFlow(models.Model):
         # Record the start
         set_build_info(self, status='running', time_start=timezone.now())
 
+        # Update github status
+        if settings.GITHUB_STATUS_UPDATES_ENABLED:
+            set_github_status.delay(self.build_id)
+
         # Set up logger
         self.logger = init_logger(self)
 
@@ -529,11 +534,12 @@ class BuildFlow(models.Model):
                 if element.tag not in ['failure', 'error']:
                     continue
                 result['Outcome'] = 'Fail'
-                result['StackTrace'] += element.text + '\n'
-                message = element.attrib['type']
-                if 'message' in element.attrib:
-                    message += ': ' + element.attrib['message']
-                result['Message'] += message + '\n'
+                if element.text:
+                    result['StackTrace'] += element.text + '\n'
+                message = element.get('type', '')
+                if element.get('message'):
+                    message += ': ' + element.get('message', '')
+                    result['Message'] += message + '\n'
             results.append(result)
         return results
 
