@@ -134,6 +134,11 @@ class Build(models.Model):
     def __unicode__(self):
         return '{}: {} - {}'.format(self.id, self.repo, self.commit)
 
+    def save(self, *args, **kwargs):
+        if not self.planrepo:
+            self.planrepo = PlanRepository.objects.get(plan_id=self.plan_id, repo_id=self.repo_id)
+        super(Build, self).save(*args, **kwargs)
+
     def get_log_html(self):
         if self.log:
             return format_log(self.log)
